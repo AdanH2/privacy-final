@@ -1,22 +1,26 @@
 from flask import Flask, request, url_for, render_template
+from index import Index
+from kAnonymity import kAnonymity
+from masking import masking
+from pseudonymization import pseudonymization
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+app.add_url_rule('/',
+                 view_func=Index.as_view('index'),
+                 methods=['GET'])
 
-@app.route('/kAnonymization')
-def kAnonymity():
-    return render_template('kAnonymity.html')
+app.add_url_rule('/kAnonymity',
+                 view_func=kAnonymity.as_view('kAnonymity'),
+                 methods=['GET'])
 
-@app.route('/masking')
-def masking():
-    return render_template('masking.html')
+app.add_url_rule('/masking',
+                 view_func=masking.as_view('masking'),
+                 methods=['GET'])
 
-@app.route('/pseudonymization')
-def pseudonymization():
-    return render_template('pseudonymization.html')
+app.add_url_rule('/pseudonymization',
+                 view_func=pseudonymization.as_view('pseudonymization'),
+                 methods=['GET'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
