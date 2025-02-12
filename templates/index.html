@@ -1,0 +1,64 @@
+{% extends "layout.html" %} {% block content %}
+<h1>Privacy Techniques</h1>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card" style="width: 18rem">
+        <img
+          src="{{ url_for('static', filename='k.png') }}"
+          class="card-img-top"
+          alt="K-Anonymization"
+        />
+        <div class="card-body">
+          <h5 class="card-title">K-Anonymization</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+          <a href="{{ url_for('kAnonymity') }}" class="btn btn-primary"
+            >Check it out!</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 18rem">
+        <img
+          src="{{ url_for('static', filename='pseudonymization.png') }}"
+          class="card-img-top"
+          alt="Pseudonymization"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Pseudonymization</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+          <a href="{{ url_for('pseudonymization') }}" class="btn btn-primary"
+            >Check it out!</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 18rem">
+        <img
+          src="{{ url_for('static', filename='masking.png') }}"
+          class="card-img-top"
+          alt="Data Masking"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Data Masking</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+          <a href="{{ url_for('masking') }}" class="btn btn-primary"
+            >Check it out!</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
