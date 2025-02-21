@@ -63,3 +63,20 @@ print(f"Updated k-anonymity level: {k}")
 
 # Print anonymity report
 r3 =report.print_report(df, QI, SA)
+
+
+grouped_data = df.groupby(QI).size().reset_index(name="Group Size")
+print("\nAnonymity Groups:")
+print(grouped_data)
+
+
+
+# Group data by quasi-identifiers to see anonymity groups
+df["Anonymity Group Size"] = df.groupby(QI)[QI[0]].transform("count")
+
+# Sort the data by anonymity groups for better visualization
+sorted_data = df.sort_values(by=["Anonymity Group Size"], ascending=False)
+
+print("\nData Grouped by Anonymity Level:\n")
+print(sorted_data)
+
