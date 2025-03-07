@@ -12,7 +12,7 @@ app.add_url_rule('/',
 
 app.add_url_rule('/kAnonymity',
                  view_func=kAnonymity.as_view('kAnonymity'),
-                 methods=['GET'])
+                 methods=['GET','POST'])
 
 app.add_url_rule('/masking',
                  view_func=masking.as_view('masking'),

@@ -1,4 +1,4 @@
-from pycanon.anonymity import k_anonymity
+from pycanon.anonymity import k_anonymity, l_diversity, t_closeness
 from pycanon import report
 import random
 import pandas as pd
@@ -25,7 +25,9 @@ SA = ["Salary"]
 k = k_anonymity(df,QI)
 
 report.print_report(df,QI,SA)
-
+grouped_data = df.groupby(QI).size().reset_index(name="Group Size")
+print("\nAnonymity Groups:")
+print(grouped_data)
 
 data = {
     "Id": [i for i in range(1,101)],
@@ -80,3 +82,16 @@ sorted_data = df.sort_values(by=["Anonymity Group Size"], ascending=False)
 print("\nData Grouped by Anonymity Level:\n")
 print(sorted_data)
 
+# Compute k-Anonymity
+k_value = k_anonymity(df, QI)
+
+# Compute l-Diversity
+l_value = l_diversity(df, QI, SA)
+
+# Compute t-Closeness
+t_value = t_closeness(df, QI, SA)
+
+# Print extracted values
+print(f"k-Anonymity: {k_value}")
+print(f"l-Diversity: {l_value}")
+print(f"t-Closeness: {t_value}")

@@ -1,1 +1,67 @@
 {% extends "layout.html" %}
+
+{% block content %}
+<h1 class="text-center">k-Anonymity</h1>
+
+<!-- Form to select QIs and SAs -->
+<form method="POST" action="{{ url_for('kAnonymity') }}">
+    <button type="submit" class="btn btn-primary">Calculate</button>
+    <br><br>
+
+    <div class="qi-group">
+        <h4>QI (Quasi-Identifier)</h4>
+        <table class="table table-bordered">
+            <tr>
+                <td><label for="cb1">Age</label></td>
+                <td><input type="checkbox" name="cb1" id="cb1" {% if ageCheck == 'on' %}checked{% endif %}></td>
+                <td><input type="number" name="sp1" id="sp1" min="0" max="100" value="{{ ageGenLevel }}"></td>
+            </tr>
+            <tr>
+                <td><label for="cb2">Zip Code</label></td>
+                <td><input type="checkbox" name="cb2" id="cb2" {% if zipCheck == 'on' %}checked{% endif %}></td>
+                <td><input type="number" name="sp2" id="sp2" min="0" max="100" value="{{ zipGenLevel }}"></td>
+            </tr>
+            <tr>
+                <td><label for="cb3">Employment</label></td>
+                <td><input type="checkbox" name="cb3" id="cb3" {% if employmentCheck == 'on' %}checked{% endif %}></td>
+                <td><input type="number" name="sp3" id="sp3" min="0" max="100" value="{{ emplymentGenLevel }}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="sa-group">
+        <h4>SA (Sensitive Attributes)</h4>
+        <table class="table table-bordered">
+            <tr>
+                <td><label for="cb4">Salary</label></td>
+                <td><input type="checkbox" name="cb4" id="cb4" {% if salaryCheck == 'on' %}checked{% endif %}></td>
+            </tr>
+            <tr>
+                <td><label for="cb5">Disease</label></td>
+                <td><input type="checkbox" name="cb5" id="cb5" {% if diseaseCheck == 'on' %}checked{% endif %}></td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+<!-- Display the result of processed data -->
+{% if result %}
+<h3>Processed Data</h3>
+<p>{{ result }}</p>
+{% endif %}
+
+<!-- Display the grouped data table -->
+<h3>Grouped Data 
+    <small style="font-size: 0.6em; font-weight: normal;">k-Anonymity = {{ k_value }}, l-Diversity = {{ l_value }}, t-Closeness = {{ t_value }}</small>
+</h3>
+<div>
+    {% if grouped_data %}
+        <div>{{ grouped_data | safe }}</div>
+    {% else %}
+        <p>No grouped data available</p>
+    {% endif %}
+</div>
+
+{% endblock %}
