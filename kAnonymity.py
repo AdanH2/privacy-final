@@ -75,7 +75,7 @@ class kAnonymity(MethodView):
             if emplymentGenLevel == "1":
                 df["Employment"] = df["Employment"].replace({"self": "other"})
             elif emplymentGenLevel == "2":
-                df["Employment"] = df["Employment"].replace({"self": "other", "government": "private"})
+                df["Employment"] = df["Employment"].replace({"self": "other", "government": "private or government", "private": "private or government"})
             elif emplymentGenLevel == "3":
                 df["Employment"] = df["Employment"].replace({"self": "*", "government": "*", "private": "*", "other": "*"})
 
