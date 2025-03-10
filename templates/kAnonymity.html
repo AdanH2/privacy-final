@@ -14,17 +14,17 @@
             <tr>
                 <td><label for="cb1">Age</label></td>
                 <td><input type="checkbox" name="cb1" id="cb1" {% if ageCheck == 'on' %}checked{% endif %}></td>
-                <td><input type="number" name="sp1" id="sp1" min="0" max="100" value="{{ ageGenLevel }}"></td>
+                <td><input type="number" name="sp1" id="sp1" min="0" max="3" value="{{ ageGenLevel }}"></td>
             </tr>
             <tr>
                 <td><label for="cb2">Zip Code</label></td>
                 <td><input type="checkbox" name="cb2" id="cb2" {% if zipCheck == 'on' %}checked{% endif %}></td>
-                <td><input type="number" name="sp2" id="sp2" min="0" max="100" value="{{ zipGenLevel }}"></td>
+                <td><input type="number" name="sp2" id="sp2" min="0" max="3" value="{{ zipGenLevel }}"></td>
             </tr>
             <tr>
                 <td><label for="cb3">Employment</label></td>
                 <td><input type="checkbox" name="cb3" id="cb3" {% if employmentCheck == 'on' %}checked{% endif %}></td>
-                <td><input type="number" name="sp3" id="sp3" min="0" max="100" value="{{ emplymentGenLevel }}"></td>
+                <td><input type="number" name="sp3" id="sp3" min="0" max="3" value="{{ emplymentGenLevel }}"></td>
             </tr>
         </table>
     </div>
