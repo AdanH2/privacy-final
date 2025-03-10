@@ -1,67 +1,164 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block content %}
+<div class="p-3">
+  <h1 class="text-center">K-Anonymity</h1>
+  <div class="container mt-5">
+    <h3>What is k-anonymity?</h3>
+    <p>
+      The k-anonymity technique makes it so that each record in a dataset cannot
+      be told apart from at least k-1 separate records. K-anonymity makes it
+      difficult for attackers to identify individual records by generalizing and
+      suppressing data. Suppression and generalizations are done on
+      <b>quasi-identifiers</b> to protect <b>sensitive attributes</b> from being
+      connected to specific records. Two other statistics that we visualize are
+      <b>l-diversity</b> and <b>t-closeness</b>. l-diversity assures that for
+      each unique group of <b>quasi-identifiers</b>, there are at least l unique
+      sensitive attributes. t-closeness is the similarity between the
+      distributions of SAs in anonymized data compared to the whole dataset.
+    </p>
+    <h3>Key words to know</h3>
+    <p>
+      <strong>Quasi-identifiers:</strong> Attributes that can be used to
+      identify an individual. These are the attributes that are generalized and
+      suppressed to protect the sensitive attributes.<br />
+      <strong>Sensitive attributes:</strong> Attributes that are sensitive and
+      need to be protected. These are the attributes that are not generalized or
+      suppressed.<br />
+      <strong>k-anonymity:</strong> A dataset is k-anonymous if each record in
+      the dataset cannot be distinguished from at least k-1 other records.<br />
+      <strong>l-diversity:</strong> A dataset is l-diverse if for each unique
+      group of quasi-identifiers, there are at least l unique sensitive
+      attributes.<br />
+      <strong>t-closeness:</strong> A dataset is t-close if the distributions of
+      sensitive attributes in the dataset are similar to the distributions of
+      the sensitive attributes in the whole dataset.<br />
+    </p>
 
-{% block content %}
-<h1 class="text-center">k-Anonymity</h1>
+    <p>
+      <strong>Generalizations (scroll box fixes generalization levels):</strong
+      ><br />
+      Age: Real Age, Age ranges of 5 years, Age ranges of 10 years, Age ranges
+      of 20 years<br />
+      Zip Code: Full zip code, First 4 of zip code followed by 1 *, First 3 of
+      zip code followed by 2 *s, First 2 of zip code followed by 3 *s<br />
+      Employment: All 4 employment types, Combine into 3 categories, Combine
+      into 2 categories, Combine into 1 category
+    </p>
 
-<!-- Form to select QIs and SAs -->
-<form method="POST" action="{{ url_for('kAnonymity') }}">
-    <button type="submit" class="btn btn-primary">Calculate</button>
-    <br><br>
+    <!-- Form to select QIs and SAs -->
+    <form method="POST" action="{{ url_for('kAnonymity') }}">
+      <button type="submit" class="btn btn-primary">Calculate</button>
+      <br /><br />
 
-    <div class="qi-group">
+      <div class="qi-group">
         <h4>QI (Quasi-Identifier)</h4>
         <table class="table table-bordered">
-            <tr>
-                <td><label for="cb1">Age</label></td>
-                <td><input type="checkbox" name="cb1" id="cb1" {% if ageCheck == 'on' %}checked{% endif %}></td>
-                <td><input type="number" name="sp1" id="sp1" min="0" max="3" value="{{ ageGenLevel }}"></td>
-            </tr>
-            <tr>
-                <td><label for="cb2">Zip Code</label></td>
-                <td><input type="checkbox" name="cb2" id="cb2" {% if zipCheck == 'on' %}checked{% endif %}></td>
-                <td><input type="number" name="sp2" id="sp2" min="0" max="3" value="{{ zipGenLevel }}"></td>
-            </tr>
-            <tr>
-                <td><label for="cb3">Employment</label></td>
-                <td><input type="checkbox" name="cb3" id="cb3" {% if employmentCheck == 'on' %}checked{% endif %}></td>
-                <td><input type="number" name="sp3" id="sp3" min="0" max="3" value="{{ emplymentGenLevel }}"></td>
-            </tr>
+          <tr>
+            <th>Attribute</th>
+            <th>Include</th>
+            <th>Generalization Level</th>
+          </tr>
+          <tr>
+            <td><label for="cb1">Age</label></td>
+            <td>
+              <input type="checkbox" name="cb1" id="cb1" {% if ageCheck == 'on'
+              %}checked{% endif %}>
+            </td>
+            <td>
+              <input
+                type="number"
+                name="sp1"
+                id="sp1"
+                min="0"
+                max="3"
+                value="{{ ageGenLevel }}"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><label for="cb2">Zip Code</label></td>
+            <td>
+              <input type="checkbox" name="cb2" id="cb2" {% if zipCheck == 'on'
+              %}checked{% endif %}>
+            </td>
+            <td>
+              <input
+                type="number"
+                name="sp2"
+                id="sp2"
+                min="0"
+                max="3"
+                value="{{ zipGenLevel }}"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><label for="cb3">Employment</label></td>
+            <td>
+              <input type="checkbox" name="cb3" id="cb3" {% if employmentCheck
+              == 'on' %}checked{% endif %}>
+            </td>
+            <td>
+              <input
+                type="number"
+                name="sp3"
+                id="sp3"
+                min="0"
+                max="3"
+                value="{{ emplymentGenLevel }}"
+              />
+            </td>
+          </tr>
         </table>
-    </div>
+      </div>
 
-    <br>
+      <br />
 
-    <div class="sa-group">
+      <div class="sa-group">
         <h4>SA (Sensitive Attributes)</h4>
         <table class="table table-bordered">
-            <tr>
-                <td><label for="cb4">Salary</label></td>
-                <td><input type="checkbox" name="cb4" id="cb4" {% if salaryCheck == 'on' %}checked{% endif %}></td>
-            </tr>
-            <tr>
-                <td><label for="cb5">Disease</label></td>
-                <td><input type="checkbox" name="cb5" id="cb5" {% if diseaseCheck == 'on' %}checked{% endif %}></td>
-            </tr>
+          <tr>
+            <th>Attribute</th>
+            <th>Include</th>
+          </tr>
+          <tr>
+            <td><label for="cb4">Salary</label></td>
+            <td>
+              <input type="checkbox" name="cb4" id="cb4" {% if salaryCheck ==
+              'on' %}checked{% endif %}>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="cb5">Disease</label></td>
+            <td>
+              <input type="checkbox" name="cb5" id="cb5" {% if diseaseCheck ==
+              'on' %}checked{% endif %}>
+            </td>
+          </tr>
         </table>
-    </div>
-</form>
+      </div>
+    </form>
 
-<!-- Display the result of processed data -->
-{% if result %}
-<h3>Processed Data</h3>
-<p>{{ result }}</p>
-{% endif %}
-
-<!-- Display the grouped data table -->
-<h3>Grouped Data 
-    <small style="font-size: 0.6em; font-weight: normal;">k-Anonymity = {{ k_value }}, l-Diversity = {{ l_value }}, t-Closeness = {{ t_value }}</small>
-</h3>
-<div>
-    {% if grouped_data %}
-        <div>{{ grouped_data | safe }}</div>
-    {% else %}
-        <p>No grouped data available</p>
+    <!-- Display the result of processed data -->
+    {% if result %}
+    <h3>Processed Data</h3>
+    <p>{{ result }}</p>
     {% endif %}
-</div>
 
+    <!-- Display the grouped data table -->
+    <h3>
+      Grouped Data
+      <small style="font-size: 0.6em; font-weight: normal"
+        >k-Anonymity = {{ k_value }}, l-Diversity = {{ l_value }}, t-Closeness =
+        {{ t_value }}</small
+      >
+    </h3>
+    <div>
+      {% if grouped_data %}
+      <div>{{ grouped_data | safe }}</div>
+      {% else %}
+      <p>No grouped data available</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

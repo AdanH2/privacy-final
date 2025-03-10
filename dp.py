@@ -30,46 +30,48 @@ class DP(MethodView):
 
             # data = df.head(int(rows)).to_dict(orient='records')
             # print(data)
-            # chatGPTKey = os.getenv('CHATGPT_KEY')
-            # client = OpenAI(api_key=chatGPTKey)
 
-            # messages = [
-            #     {"role": "system", "content": "You are a providing data needed to tranform easily to a csv format."},
-            #     {"role": "user", "content": f"Give me the answer to the following question in a table format with {rows} rows and {columns} columns. Please provide just the table and no other information."},
-            #     {"role": "assistant", "content": "Sure! Please provide the type of data you would like to see."},
-            #     {"role": "user", "content": f"{prompt}"},
-            # ]
 
-            # response = client.chat.completions.create(
-            #     model="gpt-4o-mini",
-            #     messages=messages
-            # )
+            chatGPTKey = os.getenv('CHATGPT_KEY')
+            client = OpenAI(api_key=chatGPTKey)
 
-            # data=response.choices[0].message.content
-            data = """
-                | Zip Code | Age | Income  | Gender | Occupation        |
-                |----------|-----|---------|--------|--------------------|
-                | 10001    | 29  | 55000   | Male   | Software Engineer   |
-                | 10002    | 34  | 72000   | Female | Marketing Manager   |
-                | 10003    | 46  | 85000   | Male   | Doctor              |
-                | 10004    | 52  | 95000   | Female | Lawyer              |
-                | 10005    | 23  | 43000   | Female | Graphic Designer    |
-                | 10006    | 31  | 62000   | Male   | Data Scientist      |
-                | 10007    | 38  | 78000   | Female | Project Manager     |
-                | 10008    | 44  | 83000   | Male   | Architect           |
-                | 10009    | 27  | 49000   | Male   | Teacher             |
-                | 10010    | 36  | 91000   | Female | Financial Analyst   |
-                | 10011    | 41  | 67000   | Male   | Nurse               |
-                | 10012    | 55  | 104000  | Female | University Professor |
-                | 10013    | 29  | 50000   | Male   | Sales Representative |
-                | 10014    | 48  | 85000   | Female | HR Manager          |
-                | 10015    | 39  | 72000   | Male   | Research Scientist   |
-                | 10016    | 33  | 64000   | Female | Customer Service Rep |
-                | 10017    | 25  | 48000   | Male   | Web Developer       |
-                | 10018    | 30  | 58000   | Female | Data Analyst        |
-                | 10019    | 43  | 88000   | Male   | Business Analyst    |
-                | 10020    | 54  | 123000  | Female | CEO                 |
-                """
+            messages = [
+                {"role": "system", "content": "You are a providing data needed to tranform easily to a csv format."},
+                {"role": "user", "content": f"Give me the answer to the following question in a table format with {rows} rows and {columns} columns. Please provide just the table and no other information."},
+                {"role": "assistant", "content": "Sure! Please provide the type of data you would like to see."},
+                {"role": "user", "content": f"{prompt}"},
+            ]
+
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages
+            )
+
+            data=response.choices[0].message.content
+            # data = """
+            #     | Zip Code | Age | Income  | Gender | Occupation        |
+            #     |----------|-----|---------|--------|--------------------|
+            #     | 10001    | 29  | 55000   | Male   | Software Engineer   |
+            #     | 10002    | 34  | 72000   | Female | Marketing Manager   |
+            #     | 10003    | 46  | 85000   | Male   | Doctor              |
+            #     | 10004    | 52  | 95000   | Female | Lawyer              |
+            #     | 10005    | 23  | 43000   | Female | Graphic Designer    |
+            #     | 10006    | 31  | 62000   | Male   | Data Scientist      |
+            #     | 10007    | 38  | 78000   | Female | Project Manager     |
+            #     | 10008    | 44  | 83000   | Male   | Architect           |
+            #     | 10009    | 27  | 49000   | Male   | Teacher             |
+            #     | 10010    | 36  | 91000   | Female | Financial Analyst   |
+            #     | 10011    | 41  | 67000   | Male   | Nurse               |
+            #     | 10012    | 55  | 104000  | Female | University Professor |
+            #     | 10013    | 29  | 50000   | Male   | Sales Representative |
+            #     | 10014    | 48  | 85000   | Female | HR Manager          |
+            #     | 10015    | 39  | 72000   | Male   | Research Scientist   |
+            #     | 10016    | 33  | 64000   | Female | Customer Service Rep |
+            #     | 10017    | 25  | 48000   | Male   | Web Developer       |
+            #     | 10018    | 30  | 58000   | Female | Data Analyst        |
+            #     | 10019    | 43  | 88000   | Male   | Business Analyst    |
+            #     | 10020    | 54  | 123000  | Female | CEO                 |
+            #     """
 
             # Step 1: Clean the string by removing '|' and '-' characters and trimming spaces
             cleaned_data = re.sub(r'[\|\-]', '', data)

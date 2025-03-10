@@ -2,6 +2,22 @@
 <h1 class="text-center">Differential Privacy</h1>
 {% if session['dev'] == true %}
 <h2>Dev Mode</h2>
+<code>
+  def count(self, data) -> int: return len(data)
+  <br />
+  def mean_dp(self, data, column, epsilon, lower_bound=None, upper_bound=None)
+  -> float: if lower_bound is None or upper_bound is None: mean =
+  BoundedMean(epsilon=epsilon) else: mean = BoundedMean(epsilon=epsilon,
+  lower_bound=lower_bound, upper_bound=upper_bound, dtype='float') return
+  mean.quick_result(list(map(lambda x: x[column], data))) def sum_dp(self, data,
+  column, epsilon, lower_bound=None, upper_bound=None) -> float: if lower_bound
+  is None or upper_bound is None: sum = BoundedSum(epsilon=epsilon,
+  dtype='float') else: sum = BoundedSum(epsilon=epsilon, delta = 0,
+  lower_bound=lower_bound, upper_bound=upper_bound, dtype='float') return
+  sum.quick_result(list(map(lambda x: x[column], data))) def count_dp(self,
+  data, column, epsilon) -> int: count = Count(epsilon=epsilon, dtype='int')
+  return count.quick_result(list(map(lambda x: x[column], data)))
+</code>
 {% endif %} {% if session['dev'] == false %}
 <div class="container mt-5">
   <h2>Background Info</h2>
@@ -10,37 +26,93 @@
       <p>
         Differential privacy is a system for publicly sharing information about
         a dataset by describing the patterns of groups within the dataset while
-        withholding information about individuals in the dataset. Differential
-        privacy is a strong form of privacy protection that has been widely
-        studied in the academic community and is increasingly being adopted in
-        practice. Differential privacy provides a mathematically rigorous
-        definition of privacy that has proven to be useful in a wide variety of
-        contexts.
+        withholding information about individuals in the dataset. It is a strong
+        form of privacy protection that has been widely studied in the academic
+        community and is increasingly being adopted in practice. Differential
+        privacy provides a mathematically rigorous definition of privacy that
+        has proven to be useful in a wide variety of contexts.
       </p>
       <p>
-        Differential privacy is a property of a data analysis or transformation
-        algorithm. An algorithm is differentially private if the outcome of the
-        analysis or transformation is (nearly) the same whether an individual's
-        data is included or excluded from the input dataset. This means that an
-        adversary who knows the output of the analysis cannot determine whether
-        a particular individual's information is included in the input dataset.
-        Differential privacy is achieved by introducing a carefully calibrated
-        amount of noise into the computation. This noise helps protect
-        individuals' privacy while still allowing the algorithm to provide
-        useful output.
+        Although differential privacy has a ton of mathmatical work behind it,
+        <b>DO NOT WORRY!</b> We will take care of all the math for you. We will
+        break down the concept of differential privacy and show you how to apply
+        it to a dataset in a simple and intuitive way.
       </p>
+      <h4>High Level</h4>
+      <p>
+        At a high level,
+        <b>differential privacy</b>
+        is a property of a data analysis or transformation algorithm that
+        ensures that the output of the algorithm does not reveal sensitive
+        information about individual data points. In other words, differential
+        privacy guarantees that the output of the algorithm is essentially the
+        same whether a particular individual's data is included or excluded from
+        the input dataset. This property is achieved by adding carefully
+        calibrated <b>noise</b> to the computation in a way that preserves the
+        overall patterns in the data while protecting the privacy of
+        individuals.
+      </p>
+      <p>
+        Differential privacy is a powerful tool for protecting privacy in a wide
+        variety of settings, from social media to healthcare to government data.
+        It is increasingly being used by companies and organizations to protect
+        the privacy of their users and customers while still being able to
+        analyze and share data.
+      </p>
+      <h4>How strong is DP?</h4>
       <p>
         Differential privacy is a strong form of privacy protection because it
         provides a mathematical guarantee that an individual's data will not be
         affected by their presence in the dataset. This guarantee holds even if
-        the adversary has auxiliary information about the individual. This makes
-        differential privacy particularly useful in settings where the adversary
-        may have access to additional information about the individuals in the
-        dataset.
+        the adversary has <b>auxiliary information</b> about the individual.
+        This makes differential privacy particularly useful in settings where
+        the adversary may have access to additional information about the
+        individuals in the dataset.
       </p>
     </div>
   </div>
-  <h2>Let's explore how to apply differential privacy to a dataset</h2>
+  <h2>Key words to know</h2>
+  <div class="row">
+    <div class="col">
+      <h4>Query:</h4>
+      <p class="bg-warning p-2">
+        A query is a function that takes a dataset as input and produces a
+        result. For example, a query might calculate the sum of a column in a
+        dataset, or count the number of rows that satisfy a certain condition.
+        Queries are used to extract information from a dataset.
+      </p>
+      <h4>Epsilon:</h4>
+      <p class="bg-warning p-2">
+        Epsilon is a parameter that controls the amount of privacy protection
+        provided by a differentially private algorithm. A smaller value of
+        epsilon provides stronger privacy protection, but may result in less
+        accurate output. Epsilon is a key parameter in differential privacy that
+        allows users to trade off privacy and accuracy.
+      </p>
+      <h4>Sensitivity:</h4>
+      <p class="bg-warning p-2">
+        Sensitivity is a measure of how much the output of a query changes when
+        a single individual's data is added or removed from the dataset. Queries
+        with higher sensitivity are more likely to leak information about
+        individuals in the dataset. Sensitivity is an important concept in
+        differential privacy because it helps to quantify the privacy risk
+        associated with a particular query.
+      </p>
+      <h4>Noise:</h4>
+      <p class="bg-warning p-2">
+        Noise is random data that is added to the output of a differentially
+        private algorithm to protect the privacy of individuals in the dataset.
+        The noise is carefully calibrated to ensure that the output of the
+        algorithm is accurate while still providing strong privacy guarantees.
+        Noise is a key component of differential privacy that helps to protect
+        individuals' privacy.
+      </p>
+    </div>
+  </div>
+  <h2>How does it work?</h2>
+  <p class="form-text">
+    Let's explore how to apply differential privacy to a dataset
+  </p>
   <h3>Step 1:</h3>
   <div class="row">
     <div class="col-5">
@@ -162,29 +234,56 @@
       {% endif %}
     </div>
   </div>
-  <h3>Step 2:</h3>
+  <h4>Step 2:</h4>
   <div class="row">
     <div class="col">
       <h4>Apply Differential Privacy:</h4>
       <form action="/calc" method="post">
         <div class="form-group">
-          <label for="epsilon">Epsilon:</label>
+          <label for="epsilon"
+            >Epsilon:
+            <i
+              class="fa-solid fa-circle-info text-primary mb-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="This is where we decide our privacy/utility tradeoff. A smaller epsilon provides stronger privacy protection, but may result in less accurate output."
+            ></i>
+          </label>
           <input
             type="number"
             class="form-control"
             id="epsilon"
             name="epsilon"
-            step="any"
+            step="0.1"
             required
           />
-          <p class="form-text">Choose an epsilon between 0 and 1</p>
+          <p class="form-text">
+            Epsilon values can range from 0 to 5, typically. Choose a decimal
+            value and see the effects!
+          </p>
         </div>
         <div class="form-group">
-          <label for="lower">Lower Bound:</label>
+          <label for="lower"
+            >Lower Bound:
+            <i
+              class="fa-solid fa-circle-info text-primary mb-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="This is the minimum value that the data can take. It is used to calculate sensitivity."
+            ></i>
+          </label>
           <input type="number" class="form-control" id="lower" name="lower" />
         </div>
         <div class="form-group">
-          <label for="sensitivity">Upper Bound:</label>
+          <label for="sensitivity"
+            >Upper Bound:
+            <i
+              class="fa-solid fa-circle-info text-primary mb-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="This is the maximum value that the data can take. It is used to calculate sensitivity."
+            ></i>
+          </label>
           <input type="number" class="form-control" id="upper" name="upper" />
           <p class="form-text">
             The lower and upper bounds are used to calculate sensitivity.
@@ -195,7 +294,15 @@
           </p>
         </div>
         <div class="form-group">
-          <label for="method">Choose a method:</label>
+          <label for="method"
+            >Choose a query:
+            <i
+              class="fa-solid fa-circle-info text-primary mb-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="The query is the function that will be applied to the data. Choose a query that you would like to apply to the data."
+            ></i>
+          </label>
           <select
             class="form-select"
             aria-label="select a method"
@@ -222,12 +329,20 @@
               });
           </script>
           <p class="form-text">
-            This is the query that will be applied to the data
+            This is the query that will be applied to the data.
           </p>
         </div>
         {% if data1 %}
         <div class="form-group">
-          <label for="column">Choose a column:</label>
+          <label for="column"
+            >Choose a column:
+            <i
+              class="fa-solid fa-circle-info text-primary mb-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="The query you chose will be applied to this column. It's best to choose a numerical column!"
+            ></i>
+          </label>
           <select
             class="form-select"
             aria-label="select a column"
@@ -240,12 +355,20 @@
             {% endfor %}
           </select>
           <p class="form-text">
-            This is the column that the query will be applied to
+            This is the column that the query will be applied to.
           </p>
         </div>
         {% endif %} {% if data2 %}
         <div class="form-group">
-          <label for="column">Choose a column:</label>
+          <label for="column"
+            >Choose a column:
+            <i
+              class="fa-solid fa-circle-info text-primary mb-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Tooltip on right"
+            ></i>
+          </label>
           <select
             class="form-select"
             aria-label="select a column"
@@ -285,27 +408,35 @@
           Apply Differential Privacy
         </button>
       </form>
-      {% if method == "sum" %}
-      <div class="bg-secondary text-white p-3 mt-3">
-        <p>The actual sum of the column "{{ column }}" is: {{ realSum }}</p>
-        <p class="mb-0">
-          The differentially private sum of the column "{{ column }}" is: {{
-          privateSum }}
-        </p>
-      </div>
-      {% elif method == "count" %}
-      <p>The actual count of the column "{{ column }}" is: {{ realCount }}</p>
-      <p>
-        The differentially private count of the column "{{ column }}" is: {{
-        privateCount }}
-      </p>
-      {% elif method == "mean" %}
-      <p>The actual mean of the column "{{ column }}" is: {{ realMean }}</p>
-      <p>
-        The differentially private mean of the column "{{ column }}" is: {{
-        privateMean }}
-      </p>
-      {% endif %}
+      <section class="mt-5" id="results">
+        {% if method == "sum" %}
+        <div class="bg-secondary text-white p-3 mt-3">
+          <p>The actual sum of the column "{{ column }}" is: {{ realSum }}</p>
+          <p class="mb-0">
+            The differentially private sum of the column "{{ column }}" is: {{
+            privateSum }}
+          </p>
+        </div>
+        {% elif method == "count" %}
+        <div class="bg-secondary text-white p-3 mt-3">
+          <p>
+            The actual count of the column "{{ column }}" is: {{ realCount }}
+          </p>
+          <p class="mb-0">
+            The differentially private count of the column "{{ column }}" is: {{
+            privateCount }}
+          </p>
+        </div>
+        {% elif method == "mean" %}
+        <div class="bg-secondary text-white p-3 mt-3">
+          <p>The actual mean of the column "{{ column }}" is: {{ realMean }}</p>
+          <p class="mb-0">
+            The differentially private mean of the column "{{ column }}" is: {{
+            privateMean }}
+          </p>
+        </div>
+        {% endif %}
+      </section>
     </div>
   </div>
   {% endif %} {% endblock %}

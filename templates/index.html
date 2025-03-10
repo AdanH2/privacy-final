@@ -1,27 +1,57 @@
 {% extends "layout.html" %} {% block content %}
-<h1>Privacy Techniques</h1>
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <div class="card mx-auto" style="width: 18rem">
-        <img
-          src="{{ url_for('static', filename='k.png') }}"
-          class="card-img-top"
-          alt="K-Anonymization"
-        />
-        <div class="card-body">
-          <h5 class="card-title">K-Anonymization</h5>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-          <a href="{{ url_for('kAnonymity') }}" class="btn btn-primary"
-            >Check it out!</a
-          >
-        </div>
-      </div>
+<div class="p-3">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Welcome to LearnPrivacy!</h1>
+      <p class="lead">
+        LearnPrivacy is a web application that provides an interactive platform
+        to learn about privacy techniques. The application is designed to help
+        users understand the concepts of privacy techniques such as
+        K-Anonymization and Differential Privacy.
+      </p>
     </div>
-    <div class="col">
+  </div>
+  <!-- <h1>Welcome to LearnPrivacy!</h1>
+<p class="lead text-center mb-4 p-3 px-5">
+  LearnPrivacy is a web application that provides an interactive platform to
+  learn about privacy techniques. The application is designed to help users
+  understand the concepts of privacy techniques such as K-Anonymization and
+  Differential Privacy.
+</p> -->
+  <div class="container mt-5">
+    <h2>A little bit about Privacy</h2>
+    <p class="lead mb-4">
+      Privacy is the ability of an individual or group to seclude themselves or
+      information about themselves, and thereby express themselves selectively.
+      The boundaries and content of what is considered private differ among
+      cultures and individuals, but share common themes. When something is
+      private to a person, it usually means that something is inherently special
+      or sensitive to them.
+    </p>
+    <h2 class="mb-4">Some Privacy Techniques</h2>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card mx-auto mb-3" style="width: 18rem">
+            <img
+              src="{{ url_for('static', filename='k.png') }}"
+              class="card-img-top"
+              alt="K-Anonymization"
+            />
+            <div class="card-body">
+              <h5 class="card-title">K-Anonymization</h5>
+              <p class="card-text">
+                K-Anonymity is a property of a dataset that has been sanitized
+                in such a way that each record is indistinguishable from at
+                least k-1 other records in the dataset.
+              </p>
+              <a href="{{ url_for('kAnonymity') }}" class="btn btn-primary"
+                >Check it out!</a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col">
       <div class="card mx-auto" style="width: 18rem">
         <img
           src="{{ url_for('static', filename='pseudonymization.png') }}"
@@ -39,23 +69,26 @@
           >
         </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="card mx-auto" style="width: 18rem">
-        <img
-          src="{{ url_for('static', filename='masking.png') }}"
-          class="card-img-top"
-          alt="Data Masking"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Differential Privacy</h5>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-          <a href="{{ url_for('dp') }}" class="btn btn-primary"
-            >Check it out!</a
-          >
+    </div> -->
+        <div class="col">
+          <div class="card mx-auto" style="width: 18rem">
+            <img
+              src="{{ url_for('static', filename='dp.png') }}"
+              class="card-img-top"
+              alt="Data Masking"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Differential Privacy</h5>
+              <p class="card-text">
+                Differential privacy is a system for publicly sharing
+                information about a dataset while protecting the privacy of
+                individual data subjects.
+              </p>
+              <a href="{{ url_for('dp') }}" class="btn btn-primary"
+                >Check it out!</a
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
