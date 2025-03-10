@@ -1,1 +1,6 @@
 flask
+pycanon
+python-dp
+openai
+Flask-Session
+python-dotenv

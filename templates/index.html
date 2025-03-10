@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <div class="card" style="width: 18rem">
+      <div class="card mx-auto" style="width: 18rem">
         <img
           src="{{ url_for('static', filename='k.png') }}"
           class="card-img-top"
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="col">
-      <div class="card" style="width: 18rem">
+      <div class="card mx-auto" style="width: 18rem">
         <img
           src="{{ url_for('static', filename='pseudonymization.png') }}"
           class="card-img-top"
@@ -41,19 +41,19 @@
       </div>
     </div>
     <div class="col">
-      <div class="card" style="width: 18rem">
+      <div class="card mx-auto" style="width: 18rem">
         <img
           src="{{ url_for('static', filename='masking.png') }}"
           class="card-img-top"
           alt="Data Masking"
         />
         <div class="card-body">
-          <h5 class="card-title">Data Masking</h5>
+          <h5 class="card-title">Differential Privacy</h5>
           <p class="card-text">
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </p>
-          <a href="{{ url_for('masking') }}" class="btn btn-primary"
+          <a href="{{ url_for('dp') }}" class="btn btn-primary"
             >Check it out!</a
           >
         </div>

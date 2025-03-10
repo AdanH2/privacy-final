@@ -1,0 +1,312 @@
+{% extends "layout.html" %} {% block content %}
+<h1 class="text-center">Differential Privacy</h1>
+{% if session['dev'] == true %}
+<h2>Dev Mode</h2>
+{% endif %} {% if session['dev'] == false %}
+<div class="container mt-5">
+  <h2>Background Info</h2>
+  <div class="row">
+    <div class="col">
+      <p>
+        Differential privacy is a system for publicly sharing information about
+        a dataset by describing the patterns of groups within the dataset while
+        withholding information about individuals in the dataset. Differential
+        privacy is a strong form of privacy protection that has been widely
+        studied in the academic community and is increasingly being adopted in
+        practice. Differential privacy provides a mathematically rigorous
+        definition of privacy that has proven to be useful in a wide variety of
+        contexts.
+      </p>
+      <p>
+        Differential privacy is a property of a data analysis or transformation
+        algorithm. An algorithm is differentially private if the outcome of the
+        analysis or transformation is (nearly) the same whether an individual's
+        data is included or excluded from the input dataset. This means that an
+        adversary who knows the output of the analysis cannot determine whether
+        a particular individual's information is included in the input dataset.
+        Differential privacy is achieved by introducing a carefully calibrated
+        amount of noise into the computation. This noise helps protect
+        individuals' privacy while still allowing the algorithm to provide
+        useful output.
+      </p>
+      <p>
+        Differential privacy is a strong form of privacy protection because it
+        provides a mathematical guarantee that an individual's data will not be
+        affected by their presence in the dataset. This guarantee holds even if
+        the adversary has auxiliary information about the individual. This makes
+        differential privacy particularly useful in settings where the adversary
+        may have access to additional information about the individuals in the
+        dataset.
+      </p>
+    </div>
+  </div>
+  <h2>Let's explore how to apply differential privacy to a dataset</h2>
+  <h3>Step 1:</h3>
+  <div class="row">
+    <div class="col-5">
+      <h4>Import Data:</h4>
+      <div class="input-group mb-3">
+        <form action="/dp" method="post" enctype="multipart/form-data">
+          <input
+            type="file"
+            class="form-control"
+            id="inputGroupFile02"
+            name="file"
+          />
+          <button type="submit" class="btn btn-primary mt-2">
+            Upload Data
+          </button>
+        </form>
+        {% if data1 %}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              {% for col in data1[0] %}
+              <th>{{ col }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in data1[1:10] %}
+            <tr>
+              {% for key, value in row.items() %}
+              <td>{{ value }}</td>
+              {% endfor %} {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+        <p>...</p>
+        <table class="table table-bordered">
+          <tbody>
+            {% for row in data1[-5:] %}
+            <tr>
+              {% for key, value in row.items() %}
+              <td>{{ value }}</td>
+              {% endfor %} {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-2">
+      <h4>or</h4>
+    </div>
+    <div class="col-5 text-center">
+      <h4>Generate Data (with AI):</h4>
+      {% if data2 %}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            {% for col in data2[0] %}
+            <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in data2[1:10] %}
+          <tr>
+            {% for key, value in row.items() %}
+            <td>{{ value }}</td>
+            {% endfor %} {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      <p>...</p>
+      <table class="table table-bordered">
+        <tbody>
+          {% for row in data2[-5:] %}
+          <tr>
+            {% for key, value in row.items() %}
+            <td>{{ value }}</td>
+            {% endfor %} {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      {% else %}
+      <form action="/dp" method="post">
+        <div class="form-group">
+          <label for="num_rows">Number of Rows:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="num_rows"
+            name="num_rows"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="num_cols">Number of Columns:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="num_cols"
+            name="num_cols"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="prompt">Enter prompt for ChatGPT:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="prompt"
+            name="prompt"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">
+          Generate Data
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <h3>Step 2:</h3>
+  <div class="row">
+    <div class="col">
+      <h4>Apply Differential Privacy:</h4>
+      <form action="/calc" method="post">
+        <div class="form-group">
+          <label for="epsilon">Epsilon:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="epsilon"
+            name="epsilon"
+            step="any"
+            required
+          />
+          <p class="form-text">Choose an epsilon between 0 and 1</p>
+        </div>
+        <div class="form-group">
+          <label for="lower">Lower Bound:</label>
+          <input type="number" class="form-control" id="lower" name="lower" />
+        </div>
+        <div class="form-group">
+          <label for="sensitivity">Upper Bound:</label>
+          <input type="number" class="form-control" id="upper" name="upper" />
+          <p class="form-text">
+            The lower and upper bounds are used to calculate sensitivity.
+            <b
+              >If no values are chosen, sensitivity will be calculated
+              automatically.</b
+            >
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="method">Choose a method:</label>
+          <select
+            class="form-select"
+            aria-label="select a method"
+            name="method"
+            required
+          >
+            <option selected>Open this select menu</option>
+            <option value="sum">Sum</option>
+            <option value="count">Count</option>
+            <option value="mean">Mean</option>
+          </select>
+          <script>
+            document
+              .querySelector('select[name="method"]')
+              .addEventListener("change", function (e) {
+                if (e.target.value === "count") {
+                  console.log("count");
+                  document.getElementById("lower").disabled = true;
+                  document.getElementById("upper").disabled = true;
+                } else {
+                  document.getElementById("lower").disabled = false;
+                  document.getElementById("upper").disabled = false;
+                }
+              });
+          </script>
+          <p class="form-text">
+            This is the query that will be applied to the data
+          </p>
+        </div>
+        {% if data1 %}
+        <div class="form-group">
+          <label for="column">Choose a column:</label>
+          <select
+            class="form-select"
+            aria-label="select a column"
+            name="column"
+            required
+          >
+            <option selected>Open this select menu</option>
+            {% for col in data1[0] %}
+            <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+          </select>
+          <p class="form-text">
+            This is the column that the query will be applied to
+          </p>
+        </div>
+        {% endif %} {% if data2 %}
+        <div class="form-group">
+          <label for="column">Choose a column:</label>
+          <select
+            class="form-select"
+            aria-label="select a column"
+            name="column"
+            required
+          >
+            <option selected>Open this select menu</option>
+            {% for col in data2[0] %}
+            <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+          </select>
+          <p class="form-text">
+            This is the column that the query will be applied to
+          </p>
+        </div>
+        {% endif %}
+        <div class="visually-hidden">
+          {% if data1 %}
+          <input
+            type="text"
+            class="form-control"
+            id="data"
+            name="data1"
+            value="{{ data1 }}"
+          />
+          {% endif %} {% if data2 %}
+          <input
+            type="text"
+            class="form-control"
+            id="data"
+            name="data2"
+            value="{{ data2 }}"
+          />
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">
+          Apply Differential Privacy
+        </button>
+      </form>
+      {% if method == "sum" %}
+      <div class="bg-secondary text-white p-3 mt-3">
+        <p>The actual sum of the column "{{ column }}" is: {{ realSum }}</p>
+        <p class="mb-0">
+          The differentially private sum of the column "{{ column }}" is: {{
+          privateSum }}
+        </p>
+      </div>
+      {% elif method == "count" %}
+      <p>The actual count of the column "{{ column }}" is: {{ realCount }}</p>
+      <p>
+        The differentially private count of the column "{{ column }}" is: {{
+        privateCount }}
+      </p>
+      {% elif method == "mean" %}
+      <p>The actual mean of the column "{{ column }}" is: {{ realMean }}</p>
+      <p>
+        The differentially private mean of the column "{{ column }}" is: {{
+        privateMean }}
+      </p>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %} {% endblock %}
+</div>
